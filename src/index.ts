@@ -11,7 +11,7 @@ const port = process.env.PORT;
 
 const url : string = process.env.AMQP_URL!;
 const queue : string = process.env.AMQP_QUEUE!;
-const urlApi : string = process.env.API_URL!;
+const urlApi : string = process.env.API2_URL!;
 
 app.listen(port, async () => {
   console.log(`Server running on port ${port}`);
@@ -22,13 +22,14 @@ app.listen(port, async () => {
   channel.consume(queue, async (message) => {
     if (message) {
       const data = JSON.parse(message.content.toString());
+      console.log(`Im reading this from RabbitMQ:`);
       console.log(data);
-      // try {
-      //   const response = await axios.post(urlApi, data);
-      //   console.log(response.data);
-      // } catch (error) {
-      //   console.error(error);
-      // }
+      try {
+        const response = await axios.post(`${urlApi}/api/newPost`, data);
+        console.log(response.data);
+      } catch (error) {
+        console.error(error);
+      }
       channel.ack(message);
     }
   });
