@@ -25,8 +25,12 @@ app.listen(port, async () => {
       console.log(`Im reading this from RabbitMQ:`);
       console.log(data);
       try {
-        const response = await axios.post(`${urlApi}/api/newPost`, data);
-        console.log(response.data);
+        const response = await axios.post(`${urlApi}/api/post/`, {
+          title: data.title,
+          content: data.content,
+          authorId: data.authorId,
+        
+        });
       } catch (error) {
         console.error(error);
       }
